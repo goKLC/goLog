@@ -5,9 +5,15 @@ Logger for go projects
 
 `go get github.com/mkilic91/goLog`
 
+#### **Import**
+   
+    import "github.com/mkilic91/goLog"
+
 #### **Usage**
 
-    log, conf := goLog.New()
+    var log goLog.LogInterface
+    var conf *goLog.Config
+    log, conf = goLog.New()
     
 
 ##### Config
@@ -29,8 +35,8 @@ PritTerminal = log print for runtime terminal
 
 This example:
 
-    log.Info("foo message", goLog.Data{"foo":"bar", "baz": "foo", "subData": goLog.Data{"subFoo": "subBar"}})
-    log.Error("foo", goLog.Data{})
+    log.Info("foo message", goLog.Context{"foo":"bar", "baz": "foo", "subContext": goLog.Context{"subFoo": "subBar"}})
+    log.Error("foo", goLog.Context{})
     
 Output:
 
@@ -38,7 +44,7 @@ Output:
 	        {
 	          "baz": "foo",
 	          "foo": "bar",
-	          "subData": {
+	          "subContext": {
 	            "subFoo": "subBar"
 	            }
 	         }
