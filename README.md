@@ -21,14 +21,20 @@ Logger for go projects
     conf.FileName = "app.log"
     conf.TimeFormat = "2006-01-02 15:04:05"
     conf.PrintTerminal = true
+    conf.Partition = true
+    conf.PartitionRange = goLog.DAILY
     
-Path = log folder e.g. myProject/logs
+Path = log folder string e.g. myProject/logs
 
-FileName = log file name
+FileName = log file name string 
 
-TimeFormat = log time format 
+TimeFormat = log time format golang time format
 
-PritTerminal = log print for runtime terminal
+PritTerminal = log print for runtime terminal true or false
+
+Partition = log file partition mode true or false
+
+PartitionRange = log file partition range HOURLY, DAILY, MONTHLY, and YEARLY
 
 
 ##### Create Log
@@ -39,6 +45,8 @@ This example:
     log.Error("foo", goLog.Context{})
     
 Output:
+
+    file path : logs/2019-11-5-app.log
 
     [2019-11-03 00:19:00] Info: foo message
 	        {

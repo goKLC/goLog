@@ -16,8 +16,14 @@ const CRITICAL Level = "Critical"
 const ALERT Level = "Alert"
 const EMERGENCY Level = "Emergency"
 
+const HOURLY PartitionRange = "Hourly"
+const DAILY PartitionRange = "Daily"
+const MONTHLY PartitionRange = "Monthly"
+const YEARLY PartitionRange = "Yearly"
+
 type Context map[string]interface{}
 type Level string
+type PartitionRange string
 
 type Log struct {
 	date    string
@@ -38,20 +44,24 @@ type LogInterface interface {
 }
 
 type Config struct {
-	Path          string
-	FileName      string
-	TimeFormat    string
-	PrintTerminal bool
+	Path           string
+	FileName       string
+	TimeFormat     string
+	PrintTerminal  bool
+	Partition      bool
+	PartitionRange PartitionRange
 }
 
 var config *Config
 
 func New() (*Log, *Config) {
 	config = &Config{
-		Path:          "",
-		FileName:      "goLog.log",
-		TimeFormat:    "2006-01-02 15:04:05",
-		PrintTerminal: false,
+		Path:           "",
+		FileName:       "goLog.log",
+		TimeFormat:     "2006-01-02 15:04:05",
+		PrintTerminal:  false,
+		Partition:      false,
+		PartitionRange: DAILY,
 	}
 
 	return &Log{}, config
@@ -100,8 +110,31 @@ func log(l *Log, message string, context Context, level Level) {
 
 func write(log *Log) {
 	var path, _ = os.Getwd()
+	var fileName = config.FileName
 	var folderPath = fmt.Sprintf("%s/%s", path, config.Path)
-	var filePath = fmt.Sprintf("%s/%s", folderPath, config.FileName)
+
+	if config.Partition {
+		var partitionFormat string
+
+		switch config.PartitionRange {
+		case HOURLY:
+			partitionFormat = "2006-01-02-15"
+			break
+		case DAILY:
+			partitionFormat = "2006-01-02"
+			break
+		case MONTHLY:
+			partitionFormat = "2006-01"
+			break
+		case YEARLY:
+			partitionFormat = "2006"
+			break
+		}
+
+		fileName = fmt.Sprintf("%s-%s", time.Now().Format(partitionFormat), fileName)
+	}
+
+	var filePath = fmt.Sprintf("%s/%s", folderPath, fileName)
 	var file *os.File
 	var err error
 
