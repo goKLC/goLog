@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"os"
+	"sync"
 	"time"
 )
 
@@ -54,6 +55,8 @@ type Config struct {
 
 var config *Config
 
+var mux = &sync.RWMutex{}
+
 func New() (*Log, *Config) {
 	config = &Config{
 		Path:           "",
@@ -68,47 +71,52 @@ func New() (*Log, *Config) {
 }
 
 func (l *Log) Debug(message string, context Context) {
-	log(l, message, context, DEBUG)
+	addLog(l, message, context, DEBUG)
 }
 
 func (l *Log) Info(message string, context Context) {
-	log(l, message, context, INFO)
+	addLog(l, message, context, INFO)
 }
 
 func (l *Log) Notice(message string, context Context) {
-	log(l, message, context, NOTICE)
+	addLog(l, message, context, NOTICE)
 }
 
 func (l *Log) Error(message string, context Context) {
-	log(l, message, context, ERROR)
+	addLog(l, message, context, ERROR)
 }
 
 func (l *Log) Warning(message string, context Context) {
-	log(l, message, context, WARNING)
+	addLog(l, message, context, WARNING)
 }
 
 func (l *Log) Critical(message string, context Context) {
-	log(l, message, context, CRITICAL)
+	addLog(l, message, context, CRITICAL)
 }
 
 func (l *Log) Alert(message string, context Context) {
-	log(l, message, context, ALERT)
+	addLog(l, message, context, ALERT)
 }
 
 func (l *Log) Emergency(message string, context Context) {
-	log(l, message, context, EMERGENCY)
+	addLog(l, message, context, EMERGENCY)
 }
 
-func log(l *Log, message string, context Context, level Level) {
-	l.date = time.Now().Format(config.TimeFormat)
-	l.message = message
-	l.context = context
-	l.level = level
-
-	write(l)
+func addLog(l *Log, message string, context Context, level Level) {
+	mux.Lock()
+	log := Log{
+		date:    time.Now().Format(config.TimeFormat),
+		level:   level,
+		message: message,
+		context: context,
+	}
+	mux.Unlock()
+	go write(log)
 }
 
-func write(log *Log) {
+func write(log Log) {
+	mux.Lock()
+
 	var path, _ = os.Getwd()
 	var fileName = config.FileName
 	var folderPath = fmt.Sprintf("%s/%s", path, config.Path)
@@ -176,4 +184,5 @@ func write(log *Log) {
 	}
 
 	_ = file.Close()
+	mux.Unlock()
 }
