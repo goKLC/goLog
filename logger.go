@@ -22,7 +22,6 @@ const DAILY PartitionRange = "Daily"
 const MONTHLY PartitionRange = "Monthly"
 const YEARLY PartitionRange = "Yearly"
 
-type Context map[string]interface{}
 type Level string
 type PartitionRange string
 
@@ -30,18 +29,18 @@ type Log struct {
 	date    string
 	level   Level
 	message string
-	context Context
+	context map[string]interface{}
 }
 
 type LogInterface interface {
-	Debug(message string, context Context)
-	Info(message string, context Context)
-	Notice(message string, context Context)
-	Warning(message string, context Context)
-	Error(message string, context Context)
-	Critical(message string, context Context)
-	Alert(message string, context Context)
-	Emergency(message string, context Context)
+	Debug(message string, context map[string]interface{})
+	Info(message string, context map[string]interface{})
+	Notice(message string, context map[string]interface{})
+	Warning(message string, context map[string]interface{})
+	Error(message string, context map[string]interface{})
+	Critical(message string, context map[string]interface{})
+	Alert(message string, context map[string]interface{})
+	Emergency(message string, context map[string]interface{})
 }
 
 type Config struct {
@@ -70,39 +69,39 @@ func New() (*Log, *Config) {
 	return &Log{}, config
 }
 
-func (l *Log) Debug(message string, context Context) {
+func (l *Log) Debug(message string, context map[string]interface{}) {
 	addLog(l, message, context, DEBUG)
 }
 
-func (l *Log) Info(message string, context Context) {
+func (l *Log) Info(message string, context map[string]interface{}) {
 	addLog(l, message, context, INFO)
 }
 
-func (l *Log) Notice(message string, context Context) {
+func (l *Log) Notice(message string, context map[string]interface{}) {
 	addLog(l, message, context, NOTICE)
 }
 
-func (l *Log) Error(message string, context Context) {
+func (l *Log) Error(message string, context map[string]interface{}) {
 	addLog(l, message, context, ERROR)
 }
 
-func (l *Log) Warning(message string, context Context) {
+func (l *Log) Warning(message string, context map[string]interface{}) {
 	addLog(l, message, context, WARNING)
 }
 
-func (l *Log) Critical(message string, context Context) {
+func (l *Log) Critical(message string, context map[string]interface{}) {
 	addLog(l, message, context, CRITICAL)
 }
 
-func (l *Log) Alert(message string, context Context) {
+func (l *Log) Alert(message string, context map[string]interface{}) {
 	addLog(l, message, context, ALERT)
 }
 
-func (l *Log) Emergency(message string, context Context) {
+func (l *Log) Emergency(message string, context map[string]interface{}) {
 	addLog(l, message, context, EMERGENCY)
 }
 
-func addLog(l *Log, message string, context Context, level Level) {
+func addLog(l *Log, message string, context map[string]interface{}, level Level) {
 	mux.Lock()
 	log := Log{
 		date:    time.Now().Format(config.TimeFormat),
