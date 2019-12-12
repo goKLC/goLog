@@ -41,8 +41,8 @@ PartitionRange = log file partition range HOURLY, DAILY, MONTHLY, and YEARLY
 
 This example:
 
-    log.Info("foo message", goLog.Context{"foo":"bar", "baz": "foo", "subContext": goLog.Context{"subFoo": "subBar"}})
-    log.Error("foo", goLog.Context{})
+    log.Info("foo message", map[string]interface{}{"foo":"bar", "baz": "foo", "subContext": map[string]interface{}{"subFoo": "subBar"}})
+    log.Error("foo", nil)
     
 Output:
 
