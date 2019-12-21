@@ -3,7 +3,7 @@ Logger for go projects
 
 #### **Install**
 
-    `go get github.com/goKLC/goLog`
+    go get github.com/goKLC/goLog
 
 #### **Import**
    
