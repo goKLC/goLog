@@ -3,11 +3,11 @@ Logger for go projects
 
 #### **Install**
 
-`go get github.com/mkilic91/goLog`
+    `go get github.com/goKLC/goLog`
 
 #### **Import**
    
-    import "github.com/mkilic91/goLog"
+    import "github.com/goKLC/goLog"
 
 #### **Usage**
 
@@ -15,26 +15,21 @@ Logger for go projects
     var conf *goLog.Config
     log, conf = goLog.New()
     
+    fileHandler := goLog.NewFileHandler()
+    fileHandler.Partition = true
+    fileHandler.PartitionRange = goLog.DAILY
+    fileHandler.Path = "log"
+    
+    terminalHandler := goLog.NewTerminalHandler()
+    
+    config.AddHandler(fileHandler)
+    config.AddHandler(terminalHandler)
+    
 
 ##### Config
-    conf.Path = "logs"
-    conf.FileName = "app.log"
     conf.TimeFormat = "2006-01-02 15:04:05"
-    conf.PrintTerminal = true
-    conf.Partition = true
-    conf.PartitionRange = goLog.DAILY
     
-Path = log folder string e.g. myProject/logs
-
-FileName = log file name string 
-
 TimeFormat = log time format golang time format
-
-PritTerminal = log print for runtime terminal true or false
-
-Partition = log file partition mode true or false
-
-PartitionRange = log file partition range HOURLY, DAILY, MONTHLY, and YEARLY
 
 
 ##### Create Log
