@@ -32,11 +32,17 @@ Logger for go projects
     redisHandler.Client = redisClient
     redisHandler.Key = "goLog"
     
+	db, _ := gorm.Open("mysql", "root:password@tcp(127.0.0.1:3306)/go_log?charset=utf8&parseTime=True")
+    dbHandler := goLog.NewDBHandler(db)
+    
     config.AddHandler(fileHandler)
     config.AddHandler(terminalHandler)
     config.AddHandler(redisHandler)
+    config.AddHandler(dbHandler)
     
 _*RedisHandler use `github.com/go-redis/redis`_
+
+_*DBHandler use `github.com/jinzhu/gorm`_
 
 ##### Config
     conf.TimeFormat = "2006-01-02 15:04:05"
