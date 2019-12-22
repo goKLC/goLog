@@ -22,9 +22,20 @@ Logger for go projects
     
     terminalHandler := goLog.NewTerminalHandler()
     
+    redisClient := redis.NewClient(&redis.Options{
+    		Addr:               "127.0.0.1:6379",
+    		Password:           "",
+    		DB:                 0,
+    	})
+    
+    	redisHandler := goLog.NewRedisHandler()
+    	redisHandler.Client = redisClient
+    	redisHandler.Key = "goLog"
+    
     config.AddHandler(fileHandler)
     config.AddHandler(terminalHandler)
     
+_*RedisHandler use `github.com/go-redis/redis`_
 
 ##### Config
     conf.TimeFormat = "2006-01-02 15:04:05"
