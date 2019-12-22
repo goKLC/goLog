@@ -28,12 +28,13 @@ Logger for go projects
     		DB:                 0,
     	})
     
-    	redisHandler := goLog.NewRedisHandler()
-    	redisHandler.Client = redisClient
-    	redisHandler.Key = "goLog"
+    redisHandler := goLog.NewRedisHandler()
+    redisHandler.Client = redisClient
+    redisHandler.Key = "goLog"
     
     config.AddHandler(fileHandler)
     config.AddHandler(terminalHandler)
+    config.AddHandler(redisHandler)
     
 _*RedisHandler use `github.com/go-redis/redis`_
 
