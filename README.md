@@ -35,10 +35,18 @@ Logger for go projects
 	db, _ := gorm.Open("mysql", "root:password@tcp(127.0.0.1:3306)/go_log?charset=utf8&parseTime=True")
     dbHandler := goLog.NewDBHandler(db)
     
+    emailHandler := goLog.NewEmailHandler()
+    emailHandler.Levels = []goLog.Level{goLog.CRITICAL, goLog.EMERGENCY, goLog.ERROR}
+    emailHandler.Host = "smtp.mailtrap.io:25"
+    emailHandler.Auth = smtp.PlainAuth("", "username", "password", "smtp.mailtrap.io")
+    emailHandler.From = "info@goklc.org"
+    emailHandler.To = []string{"admin@goklc.org", "mkilic@goklc.org"}
+    	
     config.AddHandler(fileHandler)
     config.AddHandler(terminalHandler)
     config.AddHandler(redisHandler)
     config.AddHandler(dbHandler)
+    config.AddHandler(emailHandler)
     
 _*RedisHandler use `github.com/go-redis/redis`_
 
