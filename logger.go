@@ -40,9 +40,8 @@ type HandlerInterface interface {
 }
 
 type Config struct {
-	TimeFormat    string
-	PrintTerminal bool
-	Handler       []HandlerInterface
+	TimeFormat string
+	Handler    []HandlerInterface
 }
 
 var config *Config
