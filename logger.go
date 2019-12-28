@@ -103,15 +103,15 @@ func addLog(l *Log, message string, context map[string]interface{}, level Level)
 		context: context,
 	}
 	mux.Unlock()
-	go write(log)
-}
 
-func write(log Log) {
-	mux.Lock()
+	var wg sync.WaitGroup
+
+	wg.Add(len(config.Handler))
 
 	for _, handler := range config.Handler {
-		handler.Write(log)
+		go func(log Log) {
+			wg.Done()
+			handler.Write(log)
+		}(log)
 	}
-
-	mux.Unlock()
 }
